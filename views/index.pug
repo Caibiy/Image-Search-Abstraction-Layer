@@ -1,0 +1,24 @@
+//- index.pug
+extends	layout.pug
+
+block title
+	title 图片搜索小工具
+
+block content
+	.container
+		h1 Image Search Layer
+		span.label.label-info 这是一个练习Node全栈的小工具
+		.clear(style='height:2px;margin:5px 0')
+		blockquote
+			p 使用手册
+			ol
+				li 得到最近的搜索记录
+				li 搜索你想要的图片
+		h3 用法1
+			code.
+				https://域名/lolcats%20funny?offset=10
+			br
+		h3 用法2
+			code.
+				https://域名/lastest
+			h4 返回结果
