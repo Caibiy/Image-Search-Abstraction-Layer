@@ -28,8 +28,8 @@ var historySchema = new Schema({
 });
 
 var History = mongoose.model('History',historySchema);
-//var dburi=process.env.MONGOLAB_URI;
-var dburi = "mongodb://localhost:27017/url-shortener";
+var dburi=process.env.MONGOLAB_URI||"mongodb://root:root@ds111489.mlab.com:11489/sites";
+//var dburi = "mongodb://localhost:27017/url-shortener";
 mongoose.connect(dburi,function(err,db){
 	if(err){
 		return console.log('DBError:'+dburi);
