@@ -8,13 +8,14 @@ var app = express();
 var path = require('path');
 var mongoose = require('mongoose');
 var Schema=mongoose.Schema;
-var appi = require('app');
+var appi = require('./app');
 
 var gSearch = require('google-images');
 var apiKey = 'AIzaSyCj6zGCOthX__AzcGDENssx-5-I5W3XR8c';
 var cseId = '009398540246307978289:iqst39d97we';
 var client = new gSearch(cseId,apiKey);
 
+var pug = require('pug');
 /**
  * 环境设置
  */
@@ -27,10 +28,19 @@ var historySchema = new Schema({
 });
 
 var History = mongoose.model('History',historySchema);
-var dburi=process.env.MONGOLAB_URI;
+//var dburi=process.env.MONGOLAB_URI;
+var dburi = "mongodb://localhost:27017/url-shortener";
 mongoose.connect(dburi,function(err,db){
 	if(err){
 		return console.log('DBError:'+dburi);
 	}
-	appi(app,History,client);
+	appi(app,History,client,pug);
 });
+/**
+ * 监听端口
+ */
+var port = process.env.PORT || 8080;
+
+app.listen(port,function(){
+	console.log('Node.js listening on port'+port);
+})
