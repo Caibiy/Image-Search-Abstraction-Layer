@@ -13,19 +13,20 @@ module.exports=function(app,History,client,pug){
 	})
 
 	app.get('/api/:name',function(req,res){
+		console.log('-------------');
+		console.log('name:'+req.params.name);
+		console.log('-------------');
 		var page = req.query.offset?req.query.offset:1;//默认搜索page为1
 		var imageName = req.params.name;
 		var date = new Date().toISOString();
-		var history = {
+	/*	var history = {
 			"term":imageName,
 			"when":date
-		};
+		};*/
 		//save(history);
 
-		client.search(imageName,{
-			page:page
-		}).then(function(images){
-			res.send(images);
+		client.search(imageName).then(function(images){
+			res.send(images.length);
 		});
 	});
 
