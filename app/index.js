@@ -26,7 +26,7 @@ module.exports=function(app,History,client,pug){
 		//save(history);
       
 		client.search(imageName).then(function(images){
-			res.send(images.length);
+			res.send(123);
 		});
 	});
 
