@@ -8,6 +8,7 @@ var app = express();
 var path = require('path');
 var mongoose = require('mongoose');
 var Schema=mongoose.Schema;
+var MongoClient = require('mongodb').MongoClient;
 var appi = require('./app');
 
 var gSearch = require('google-images');
@@ -15,26 +16,25 @@ var apiKey = 'AIzaSyAw1PyCqYEp1Fmk8qMGpXagP2LAwX_yXdE';
 var cseId = '009439860460342694497:qgs3igncbno';
 var client = new gSearch(cseId,apiKey);
 
-var pug = require('pug');
 /**
  * 环境设置
  */
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','pug');
 
-var historySchema = new Schema({
+/*var historySchema = new Schema({
 	term: String,
 	when: String
 });
 
-var History = mongoose.model('History',historySchema);
-var dburi=process.env.MONGOLAB_URI||"mongodb://root:root@ds111489.mlab.com:11489/sites";
-//var dburi = "mongodb://localhost:27017/image";
-mongoose.connect(dburi,function(err,db){
+var History = mongoose.model('History',historySchema);*/
+//var dburi=process.env.MONGOLAB_URI||"mongodb://root:root@ds111489.mlab.com:11489/sites";
+var dburi = "mongodb://localhost:27017/image";
+MongoClient.connect(dburi,function(err,db){
 	if(err){
-		return console.log('DBError:'+dburi);
+		 console.log('DBError:'+dburi);
 	}
-	appi(app,History,client,pug);
+	appi(app,db,client);
 });
 /**
  * 监听端口

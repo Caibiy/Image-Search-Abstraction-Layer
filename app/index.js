@@ -4,7 +4,7 @@
  * @return      
  */
 
-module.exports=function(app,History,client,pug){
+module.exports=function(app,db,client){
 	
 	app.get('/',function(req,res){
 		res.render('index',{
@@ -19,15 +19,18 @@ module.exports=function(app,History,client,pug){
 		var page = req.query.offset?req.query.offset:1;//默认搜索page为1
 		var imageName = req.params.name;
 		var date = new Date().toISOString();
-	/*	var history = {
-			"term":imageName,
-			"when":date
-		};*/
-		//save(history);
+		var history = {
+			term:imageName,
+			when:date
+		};
+		db.collection('coll_image').insert(history,function(err){
+			if(err)
+				 console.log('Db Error: '+err);
+		})
       
-		client.search(imageName).then(function(images){
+		/*client.search(imageName).then(function(images){
 			res.send(images.map(makeList));
-		});
+		});*/
 	});
 
 	app.get('/api/lastest',getHistory);
@@ -41,29 +44,15 @@ module.exports=function(app,History,client,pug){
 	
 	function save(obj){
 		//保存对象到数据库
-		var history = new History(obj);
-		history.save(function(err,history){
-			if(err) throw err;
-			console.log('Saved' + history);
+		db.collection('coll_image').insert(obj,function(err){
+			if(err)
+				 console.log('Db Error: '+err);
 		})
 	}
 
 	function getHistory(req,res){
-		History.find({},null,{
-			"limit":10,
-			"sort":{
-				"when":-1
-			}
-		},function(err,history){
-			if(err) return console.error(err);
-			console.log(history);
-			res.send(history.map(function(arg){
-				return {
-					term: arg.term,
-					when: arg.when
-				};
-			}));
-		});
+		var histors=db.collection('coll_image').find();
+		res.send(historys.map(makeList));
 	}
 
 }
