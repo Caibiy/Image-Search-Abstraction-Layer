@@ -16,6 +16,7 @@ var apiKey = 'AIzaSyAw1PyCqYEp1Fmk8qMGpXagP2LAwX_yXdE';
 var cseId = '009439860460342694497:qgs3igncbno';
 var client = new gSearch(cseId,apiKey);
 
+var Search = require('./models/search');
 /**
  * 环境设置
  */
@@ -29,12 +30,18 @@ app.set('view engine','pug');
 
 var History = mongoose.model('History',historySchema);*/
 //var dburi=process.env.MONGOLAB_URI||"mongodb://root:root@ds111489.mlab.com:11489/sites";
-var dburi = "mongodb://localhost:27017/image";
-MongoClient.connect(dburi,function(err,db){
+var dburi = "mongodb://root:root@ds059804.mlab.com:59804/image";
+/*MongoClient.connect(dburi,function(err,db){
 	if(err){
 		 console.log('DBError:'+dburi);
 	}
 	appi(app,db,client);
+});*/
+mongoose.connect(dburi);
+var db = mongoose.connection;
+db.on('error',console.error.bind(console,'connection error'));
+db.once('open',function(){
+	appi(app,db,client,Search);
 });
 /**
  * 监听端口
